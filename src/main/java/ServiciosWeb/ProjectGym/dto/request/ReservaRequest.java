@@ -8,4 +8,5 @@ public class ReservaRequest {
     private LocalDate fechaReserva;
     private int idUsuario;
     private int idClase;
+    private String estado;
 }

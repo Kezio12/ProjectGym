@@ -45,6 +45,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setNombre(request.getNombre());
         usuario.setEmail(request.getEmail());
         usuario.setTelefono(request.getTelefono());
+        usuario.setPassword(request.getPassword());
         usuario.setRol(rol);
 
         Usuario guardado = usuarioRepository.save(usuario);
@@ -69,31 +70,36 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public UsuarioResponse actualizarUsuario(int idUsuario, UsuarioRequest request) {
-        Usuario usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + idUsuario));
+    public UsuarioResponse actualizarUsuario(int id, UsuarioRequest request) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
 
-        // Si cambió el email, validar unicidad
+        // Actualizar campos
+        if (request.getNombre() != null) {
+            usuario.setNombre(request.getNombre());
+        }
+
         if (request.getEmail() != null && !request.getEmail().equals(usuario.getEmail())) {
-            Optional<Usuario> porEmail = usuarioRepository.findByEmail(request.getEmail());
-            if (porEmail.isPresent() && porEmail.get().getIdUsuario() != idUsuario) {
-                throw new BadRequestException("Otro usuario ya utiliza el email indicado");
-            }
+            //Verificar que el nuevo email no exista en otro usuario
+            usuarioRepository.findByEmail(request.getEmail())
+                    .ifPresent(existingUser -> {
+                        if (existingUser.getIdUsuario() != id) { // Solo si es un usuario diferente
+                            throw new BadRequestException("El email ya está en uso por otro usuario");
+                        }
+                    });
             usuario.setEmail(request.getEmail());
         }
 
-        if (request.getNombre() != null) usuario.setNombre(request.getNombre());
-        if (request.getTelefono() != null) usuario.setTelefono(request.getTelefono());
-
-        // Si solicita cambiar rol
-        if (request.getIdRol() != 0 && (usuario.getRol() == null || usuario.getRol().getIdRol() != request.getIdRol())) {
-            Rol rol = rolRepository.findById(request.getIdRol())
-                    .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con id: " + request.getIdRol()));
-            usuario.setRol(rol);
+        if (request.getTelefono() != null) {
+            usuario.setTelefono(request.getTelefono());
         }
 
-        Usuario actualizado = usuarioRepository.save(usuario);
-        return mapToResponse(actualizado);
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+            usuario.setPassword(request.getPassword()); // En producción, hashear aquí
+        }
+
+        Usuario usuarioActualizado = usuarioRepository.save(usuario);
+        return mapToResponse(usuarioActualizado);
     }
 
     @Override

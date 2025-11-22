@@ -43,8 +43,9 @@ public class PagoServiceImpl implements PagoService {
         Pago guardado = pagoRepository.save(p);
         return mapToResponse(guardado);
     }
+
     @Override
-    public PagoResponse actualizarPago(int idPago, PagoRequest request) {
+    public PagoResponse actualizarPago(Integer idPago, PagoRequest request) { //CAMBIADO: int → Integer
         Pago p = pagoRepository.findById(idPago)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Pago no encontrado con id: " + idPago
@@ -70,7 +71,7 @@ public class PagoServiceImpl implements PagoService {
 
     @Override
     @Transactional(readOnly = true)
-    public PagoResponse obtenerPagoPorId(int idPago) {
+    public PagoResponse obtenerPagoPorId(Integer idPago) { //CAMBIADO: int → Integer
         Pago p = pagoRepository.findById(idPago)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Pago no encontrado con id: " + idPago
@@ -88,7 +89,7 @@ public class PagoServiceImpl implements PagoService {
     }
 
     @Override
-    public void eliminarPago(int idPago) {
+    public void eliminarPago(Integer idPago) { //CAMBIADO: int → Integer
         Pago p = pagoRepository.findById(idPago)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Pago no encontrado con id: " + idPago

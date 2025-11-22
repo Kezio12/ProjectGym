@@ -12,6 +12,7 @@ import ServiciosWeb.ProjectGym.repositories.ClaseRepository;
 import ServiciosWeb.ProjectGym.repositories.EntrenadorRepository;
 import ServiciosWeb.ProjectGym.repositories.HorarioRepository;
 import ServiciosWeb.ProjectGym.services.interfaces.ClaseService;
+import ServiciosWeb.ProjectGym.repositories.ReservaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,17 +27,20 @@ public class ClaseServiceImpl implements ClaseService {
     private final ActividadRepository actividadRepository;
     private final EntrenadorRepository entrenadorRepository;
     private final HorarioRepository horarioRepository;
+    private final ReservaRepository reservaRepository;
 
     public ClaseServiceImpl(
             ClaseRepository claseRepository,
             ActividadRepository actividadRepository,
             EntrenadorRepository entrenadorRepository,
-            HorarioRepository horarioRepository
+            HorarioRepository horarioRepository,
+            ReservaRepository reservaRepository
     ) {
         this.claseRepository = claseRepository;
         this.actividadRepository = actividadRepository;
         this.entrenadorRepository = entrenadorRepository;
         this.horarioRepository = horarioRepository;
+        this.reservaRepository = reservaRepository;
     }
 
     @Override
@@ -77,10 +81,20 @@ public class ClaseServiceImpl implements ClaseService {
     @Override
     @Transactional(readOnly = true)
     public List<ClaseResponse> listarClases() {
-        return claseRepository.findAll()
+        List<ClaseResponse> clases = claseRepository.findAll()
                 .stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
+
+        //DEBUG - Ver qué se está enviando al frontend
+        System.out.println("🚀 DEBUG - Enviando " + clases.size() + " clases al frontend:");
+        clases.forEach(c -> {
+            System.out.println("   Clase ID: " + c.getIdClase() +
+                    " | Cupo Máximo: " + c.getCupoMaximo() +
+                    " | Cupos Disponibles: " + c.getCuposDisponibles());
+        });
+
+        return clases;
     }
 
     @Override
@@ -130,6 +144,16 @@ public class ClaseServiceImpl implements ClaseService {
         r.setIdActividad(c.getActividad().getIdActividad());
         r.setIdEntrenador(c.getEntrenador().getIdEntrenador());
         r.setIdHorario(c.getHorario() != null ? c.getHorario().getIdHorario() : null);
+
+        // ✅ DEBUG - Calcular cupos disponibles
+        long reservasCount = reservaRepository.countByClaseIdClase(c.getIdClase());
+        System.out.println("DEBUG Clase ID: " + c.getIdClase() +
+                ", Cupo Máximo: " + c.getCupoMaximo() +
+                ", Reservas Count: " + reservasCount +
+                ", Cupos Disponibles: " + (c.getCupoMaximo() - reservasCount));
+
+        r.setCuposDisponibles((int) (c.getCupoMaximo() - reservasCount));
+
         return r;
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reservas")
+@RequestMapping("/api/reservas")
 public class ReservaController {
 
     private final ReservaService reservaService;
@@ -31,6 +31,11 @@ public class ReservaController {
     @GetMapping
     public ResponseEntity<List<ReservaResponse>> listar() {
         return ResponseEntity.ok(reservaService.listarReservas());
+    }
+
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<List<ReservaResponse>> obtenerReservasPorUsuario(@PathVariable int usuarioId) {
+        return ResponseEntity.ok(reservaService.obtenerReservasPorUsuario(usuarioId));
     }
 
     @DeleteMapping("/{id}")

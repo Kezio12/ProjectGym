@@ -19,6 +19,9 @@ public class Reserva {
 
     private LocalDate fechaReserva;
 
+    @Column(name = "estado")
+    private String estado;
+
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;

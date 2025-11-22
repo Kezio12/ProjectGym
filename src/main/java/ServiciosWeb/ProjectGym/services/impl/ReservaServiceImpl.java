@@ -64,6 +64,7 @@ public class ReservaServiceImpl implements ReservaService {
         r.setFechaReserva(request.getFechaReserva());
         r.setClase(clase);
         r.setUsuario(usuario);
+        r.setEstado("ACTIVA");
 
         Reserva guardada = reservaRepository.save(r);
         return mapToResponse(guardada);
@@ -93,6 +94,20 @@ public class ReservaServiceImpl implements ReservaService {
         reservaRepository.delete(r);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReservaResponse> obtenerReservasPorUsuario(int usuarioId) {
+        // Verificar que el usuario existe
+        if (!usuarioRepository.existsById(usuarioId)) {
+            throw new ResourceNotFoundException("Usuario no encontrado con id: " + usuarioId);
+        }
+
+        return reservaRepository.findByUsuarioIdUsuario(usuarioId)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     /* ---- Helper ---- */
 
     private ReservaResponse mapToResponse(Reserva r) {
@@ -101,6 +116,7 @@ public class ReservaServiceImpl implements ReservaService {
         resp.setFechaReserva(r.getFechaReserva());
         resp.setIdUsuario(r.getUsuario().getIdUsuario());
         resp.setIdClase(r.getClase().getIdClase());
+        resp.setEstado(r.getEstado());
         return resp;
     }
 }

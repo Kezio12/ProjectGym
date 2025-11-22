@@ -11,4 +11,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     // Verificar si existe un usuario con ese email (más eficiente para validaciones)
     boolean existsByEmail(String email);
+
 }

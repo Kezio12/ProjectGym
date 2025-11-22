@@ -16,7 +16,6 @@ public class Asistencia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAsistencia;
-
     private LocalDate fecha;
     private boolean presente;
 

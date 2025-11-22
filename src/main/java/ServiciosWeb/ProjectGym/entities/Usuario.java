@@ -24,6 +24,9 @@ public class Usuario {
 
     private String telefono;
 
+    private String password;
+
+
     // Relación con Rol N:1
     @ManyToOne
     @JoinColumn(name = "idRol", nullable = false)

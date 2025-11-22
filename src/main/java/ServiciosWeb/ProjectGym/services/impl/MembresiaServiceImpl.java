@@ -53,7 +53,7 @@ public class MembresiaServiceImpl implements MembresiaService {
 
     @Override
     @Transactional(readOnly = true)
-    public MembresiaResponse obtenerMembresiaPorId(int idMembresia) {
+    public MembresiaResponse obtenerMembresiaPorId(Integer idMembresia) { // ✅ Integer
         Membresia m = membresiaRepository.findById(idMembresia)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Membresía no encontrada con id: " + idMembresia
@@ -71,7 +71,7 @@ public class MembresiaServiceImpl implements MembresiaService {
     }
 
     @Override
-    public MembresiaResponse actualizarMembresia(int idMembresia, MembresiaRequest request) {
+    public MembresiaResponse actualizarMembresia(Integer idMembresia, MembresiaRequest request) { // ✅ Integer
         Membresia m = membresiaRepository.findById(idMembresia)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Membresía no encontrada con id: " + idMembresia
@@ -86,7 +86,7 @@ public class MembresiaServiceImpl implements MembresiaService {
     }
 
     @Override
-    public void eliminarMembresia(int idMembresia) {
+    public void eliminarMembresia(Integer idMembresia) { // ✅ Integer
         Membresia m = membresiaRepository.findById(idMembresia)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Membresía no encontrada con id: " + idMembresia

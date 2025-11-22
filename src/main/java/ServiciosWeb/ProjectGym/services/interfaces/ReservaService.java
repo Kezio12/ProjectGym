@@ -14,4 +14,6 @@ public interface ReservaService {
     List<ReservaResponse> listarReservas();
 
     void eliminarReserva(int idReserva);
+
+    List<ReservaResponse> obtenerReservasPorUsuario(int usuarioId);
 }

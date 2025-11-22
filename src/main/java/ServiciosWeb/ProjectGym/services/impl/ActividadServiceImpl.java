@@ -24,10 +24,11 @@ public class ActividadServiceImpl implements ActividadService {
 
     @Override
     public ActividadResponse crearActividad(ActividadRequest request) {
-
         Actividad a = new Actividad();
         a.setNombre(request.getNombre());
         a.setDescripcion(request.getDescripcion());
+        a.setDuracion(request.getDuracion()); // ← FALTABA
+        a.setCapacidadMaxima(request.getCapacidadMaxima()); // ← FALTABA
 
         Actividad guardada = actividadRepository.save(a);
         return mapToResponse(guardada);
@@ -61,6 +62,8 @@ public class ActividadServiceImpl implements ActividadService {
 
         if (request.getNombre() != null) a.setNombre(request.getNombre());
         if (request.getDescripcion() != null) a.setDescripcion(request.getDescripcion());
+        if (request.getDuracion() != null) a.setDuracion(request.getDuracion());
+        if (request.getCapacidadMaxima() != null) a.setCapacidadMaxima(request.getCapacidadMaxima());
 
         Actividad actualizada = actividadRepository.save(a);
         return mapToResponse(actualizada);
@@ -82,6 +85,8 @@ public class ActividadServiceImpl implements ActividadService {
         r.setIdActividad(a.getIdActividad());
         r.setNombre(a.getNombre());
         r.setDescripcion(a.getDescripcion());
+        r.setDuracion(a.getDuracion());
+        r.setCapacidadMaxima(a.getCapacidadMaxima());
         return r;
     }
 }

@@ -9,11 +9,11 @@ public interface MembresiaService {
 
     MembresiaResponse crearMembresia(MembresiaRequest request);
 
-    MembresiaResponse obtenerMembresiaPorId(int idMembresia);
+    MembresiaResponse obtenerMembresiaPorId(Integer idMembresia); // ✅ CAMBIAR: int → Integer
 
     List<MembresiaResponse> listarMembresias();
 
-    MembresiaResponse actualizarMembresia(int idMembresia, MembresiaRequest request);
+    MembresiaResponse actualizarMembresia(Integer idMembresia, MembresiaRequest request); // ✅ CAMBIAR: int → Integer
 
-    void eliminarMembresia(int idMembresia);
+    void eliminarMembresia(Integer idMembresia); // ✅ CAMBIAR: int → Integer
 }

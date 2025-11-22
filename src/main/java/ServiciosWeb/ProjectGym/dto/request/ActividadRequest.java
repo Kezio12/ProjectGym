@@ -6,4 +6,6 @@ import lombok.Data;
 public class ActividadRequest {
     private String nombre;
     private String descripcion;
+    private Integer duracion;
+    private Integer capacidadMaxima;
 }

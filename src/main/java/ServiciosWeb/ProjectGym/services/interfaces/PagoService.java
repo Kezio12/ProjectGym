@@ -8,12 +8,8 @@ import java.util.List;
 public interface PagoService {
 
     PagoResponse crearPago(PagoRequest request);
-
-    PagoResponse obtenerPagoPorId(int idPago);
-
+    PagoResponse obtenerPagoPorId(Integer idPago); // ✅ Cambiar int → Integer
     List<PagoResponse> listarPagos();
-
-    PagoResponse actualizarPago(int idPago, PagoRequest request);  // ← "actualizarPago"
-
-    void eliminarPago(int idPago);
+    PagoResponse actualizarPago(Integer idPago, PagoRequest request); // ✅ Cambiar int → Integer
+    void eliminarPago(Integer idPago); // ✅ Cambiar int → Integer
 }
